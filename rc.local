@@ -1,0 +1,36 @@
+# Put your custom commands here that should be executed once
+# the system init finished. By default this file does nothing.
+
+# credentials
+if [ ! -f /root/.profile ]; then
+cat > /root/.profile << EOF
+export \$SERVICE_TOKEN="YOUR_PRIVATE_SERVICE_TOKEN"
+EOF
+fi
+
+if [ ! -f /root/letsencrypt.sh ]; then
+cat > /root/letsencrypt.sh << EOF
+#!/bin/sh
+
+# domain and mail
+DOMAIN="ANY.DOMAIN.COM"
+MAIL="YOURMAIL@ANY.DOMAIN.COM"
+
+# service and token
+SERVICE="dns_hetzner"
+SERVICE_TOKEN="HETZNER_Token"
+
+# default CA ZeroSSL
+CA="letsencrypt"
+
+# install ACME client
+curl https://get.acme.sh | sh -s email=\$MAIL
+
+# request and import certifiacte
+/root/.acme.sh/acme.sh --force --issue --dns \$SERVICE --server \$CA -d \$DOMAIN --fullchainpath /etc/uhttpd.crt --keypath /etc/uhttpd.key  --reloadcmd "/etc/init.d/uhttpd restart" --log
+EOF
+chmod a+x /root/letsencrypt.sh
+fi
+
+/root/letsencrypt.sh &
+exit 0
