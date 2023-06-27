@@ -8,8 +8,8 @@ export \$SERVICE_TOKEN="YOUR_PRIVATE_SERVICE_TOKEN"
 EOF
 fi
 
-if [ ! -f /root/letsencrypt.sh ]; then
-cat > /root/letsencrypt.sh << EOF
+if [ ! -f /root/ssl.sh ]; then
+cat > /root/ssl.sh << EOF
 #!/bin/sh
 
 # domain and mail
@@ -29,8 +29,8 @@ curl https://get.acme.sh | sh -s email=\$MAIL
 # request and import certifiacte
 /root/.acme.sh/acme.sh --force --issue --dns \$SERVICE --server \$CA -d \$DOMAIN --fullchainpath /etc/uhttpd.crt --keypath /etc/uhttpd.key  --reloadcmd "/etc/init.d/uhttpd restart" --log
 EOF
-chmod a+x /root/letsencrypt.sh
+chmod a+x /root/ssl.sh
 fi
 
-/root/letsencrypt.sh &
+/root/ssl.sh &
 exit 0
