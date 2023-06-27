@@ -16,7 +16,7 @@ cat > /root/letsencrypt.sh << EOF
 DOMAIN="ANY.DOMAIN.COM"
 MAIL="YOURMAIL@ANY.DOMAIN.COM"
 
-# service and token
+# please visit acme.sh for available SERVICE and SERVICE_TOKEN, this example uses the free of charge DNS service from dns.hetzner.com
 SERVICE="dns_hetzner"
 SERVICE_TOKEN="HETZNER_Token"
 
